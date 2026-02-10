@@ -38,9 +38,13 @@ A modern, responsive task management application built with HTML, CSS, and JavaS
 
 ## Project Structure
 /
+
 ├── index.html
+
 ├── style.css
+
 ├── script.js
+
 └── README.md
 
 ## Technologies Used
