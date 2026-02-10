@@ -1,5 +1,5 @@
 # TaskFlow - Task Management App
-[Open](https://wwww.icybits-lab.github.io/TaskFlow/)
+[Open](https://icybits-lab.github.io/TaskFlow/)
 
 A modern, responsive task management application built with HTML, CSS, and JavaScript.
 
