@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow | Task Management App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✓</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-tasks"></i>
+                <h1>TaskFlow</h1>
+                <span class="tagline">Organize Your Day</span>
+            </div>
+            <div class="header-actions">
+                <button id="themeToggle" class="btn-icon" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="statsToggle" class="btn-icon" title="View Statistics">
+                    <i class="fas fa-chart-bar"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Panel - Add Task & Categories -->
+            <div class="left-panel">
+                <!-- Add Task Form -->
+                <div class="card add-task-form">
+                    <h2><i class="fas fa-plus-circle"></i> Add New Task</h2>
+                    <form id="taskForm">
+                        <div class="form-group">
+                            <input type="text" id="taskTitle" placeholder="Task title..." required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="taskDescription" placeholder="Description (optional)" rows="3"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="taskCategory"><i class="fas fa-tag"></i> Category</label>
+                                <select id="taskCategory">
+                                    <option value="work">Work</option>
+                                    <option value="personal">Personal</option>
+                                    <option value="shopping">Shopping</option>
+                                    <option value="health">Health</option>
+                                    <option value="learning">Learning</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="taskPriority"><i class="fas fa-flag"></i> Priority</label>
+                                <select id="taskPriority">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskDueDate"><i class="fas fa-calendar"></i> Due Date</label>
+                            <input type="date" id="taskDueDate">
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Task
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Categories -->
+                <div class="card categories">
+                    <h2><i class="fas fa-folder"></i> Categories</h2>
+                    <div class="category-list">
+                        <button class="category-btn active" data-category="all">
+                            <i class="fas fa-list"></i> All Tasks
+                            <span id="countAll" class="category-count">0</span>
+                        </button>
+                        <button class="category-btn" data-category="work">
+                            <i class="fas fa-briefcase"></i> Work
+                            <span id="countWork" class="category-count">0</span>
+                        </button>
+                        <button class="category-btn" data-category="personal">
+                            <i class="fas fa-home"></i> Personal
+                            <span id="countPersonal" class="category-count">0</span>
+                        </button>
+                        <button class="category-btn" data-category="shopping">
+                            <i class="fas fa-shopping-cart"></i> Shopping
+                            <span id="countShopping" class="category-count">0</span>
+                        </button>
+                        <button class="category-btn" data-category="health">
+                            <i class="fas fa-heartbeat"></i> Health
+                            <span id="countHealth" class="category-count">0</span>
+                        </button>
+                        <button class="category-btn" data-category="learning">
+                            <i class="fas fa-graduation-cap"></i> Learning
+                            <span id="countLearning" class="category-count">0</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="card quick-stats">
+                    <h2><i class="fas fa-chart-pie"></i> Quick Stats</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number" id="totalTasks">0</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="completedTasks">0</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="pendingTasks">0</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="todayTasks">0</div>
+                            <div class="stat-label">Today</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Task List -->
+            <div class="right-panel">
+                <!-- Task List Header -->
+                <div class="task-list-header">
+                    <h2 id="currentCategory">All Tasks</h2>
+                    <div class="task-actions">
+                        <button id="sortTasks" class="btn-icon" title="Sort Tasks">
+                            <i class="fas fa-sort-amount-down"></i>
+                        </button>
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" placeholder="Search tasks...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task Filters -->
+                <div class="task-filters">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="pending">Pending</button>
+                        <button class="filter-btn" data-filter="completed">Completed</button>
+                        <button class="filter-btn" data-filter="today">Due Today</button>
+                    </div>
+                    <div class="priority-filters">
+                        <span class="filter-label">Priority:</span>
+                        <button class="priority-filter-btn active" data-priority="all">All</button>
+                        <button class="priority-filter-btn" data-priority="high">
+                            <i class="fas fa-flag"></i> High
+                        </button>
+                        <button class="priority-filter-btn" data-priority="medium">
+                            <i class="fas fa-flag"></i> Medium
+                        </button>
+                        <button class="priority-filter-btn" data-priority="low">
+                            <i class="fas fa-flag"></i> Low
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Task List -->
+                <div class="task-list" id="taskList">
+                    <!-- Tasks will be dynamically added here -->
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h3>No tasks yet</h3>
+                        <p>Add your first task to get started!</p>
+                    </div>
+                </div>
+
+                <!-- Bulk Actions -->
+                <div class="bulk-actions">
+                    <button id="clearCompleted" class="btn btn-secondary">
+                        <i class="fas fa-trash"></i> Clear Completed
+                    </button>
+                    <button id="selectAll" class="btn btn-secondary">
+                        <i class="fas fa-check-square"></i> Select All
+                    </button>
+                    <button id="deleteSelected" class="btn btn-danger" disabled>
+                        <i class="fas fa-trash-alt"></i> Delete Selected
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Statistics Modal -->
+        <div id="statsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-chart-bar"></i> Task Statistics</h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="stats-container">
+                        <div class="stat-chart">
+                            <h3>Tasks by Category</h3>
+                            <div class="chart-bar" id="categoryChart">
+                                <!-- Chart will be generated here -->
+                            </div>
+                        </div>
+                        <div class="stat-chart">
+                            <h3>Tasks by Priority</h3>
+                            <div class="chart-bar" id="priorityChart">
+                                <!-- Chart will be generated here -->
+                            </div>
+                        </div>
+                        <div class="stat-numbers">
+                            <h3>Productivity Overview</h3>
+                            <div class="stat-grid">
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background-color: #3498db;">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <div class="stat-value" id="completionRate">0%</div>
+                                        <div class="stat-title">Completion Rate</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background-color: #2ecc71;">
+                                        <i class="fas fa-bolt"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <div class="stat-value" id="avgCompletion">0</div>
+                                        <div class="stat-title">Avg. Tasks/Day</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background-color: #e74c3c;">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <div class="stat-value" id="overdueTasks">0</div>
+                                        <div class="stat-title">Overdue</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background-color: #f39c12;">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <div class="stat-value" id="upcomingTasks">0</div>
+                                        <div class="stat-title">Upcoming</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>TaskFlow &copy; 2024 | Built with HTML, CSS & JavaScript</p>
+            <p class="footer-note">Tasks are saved automatically in your browser</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
